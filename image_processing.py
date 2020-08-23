@@ -1,6 +1,5 @@
 import cv2
 import os
-from covid_scrapping import get_update
 
 
 def get_black_and_white(path, image):
@@ -17,6 +16,19 @@ def get_black_and_white(path, image):
     return blackAndWhiteImage
 
 
+def get_content(image, path='assets'):
+    header = image[45:75, 10:685]
+    content = image[115:1005, 10:685]
+    total = image[1035:1060, 10:685]
+
+    cv2.imwrite(os.path.join(path, 'header.jpg'), header)
+    cv2.imwrite(os.path.join(path, 'content.jpg'), content)
+    cv2.imwrite(os.path.join(path, 'total.jpg'), total)
+
+    return [header, content, total]
+
+
 if __name__ == '__main__':
 
     bw_image = get_black_and_white("assets", 'assets/COVID1.JPG')
+    get_content(bw_image)

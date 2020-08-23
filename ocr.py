@@ -1,22 +1,31 @@
 import pytesseract
 from PIL import Image
-from image_processing import get_black_and_white
 
 
-def read_image(image=None):
+def read_content(images=None):
     # setting up tesseract path
     pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
-    if image is None:
-        img = Image.open('assets/img_bw.jpg')
+    if images is None:
+        header = Image.open('assets/header.jpg')
+        content = Image.open('assets/content.jpg')
+        total = Image.open('assets/total.jpg')
+
+        imgs = [header, content, total]
     else:
-        img = image
+        imgs = images
 
     # recognizing text
-    text = pytesseract.image_to_string(img)
-    print(text)
+    txt = []
+    for x, img in enumerate(imgs):
+        text = pytesseract.image_to_string(img)
+        with open('assets/ocr_text_' + str(x) + '.txt', 'w') as f:
+            f.write(text)
+        print(text)
+        txt.append(text)
 
-    return text
+    return txt
 
 
 if __name__ == '__main__':
-    read_image()
+    read_content()
+
